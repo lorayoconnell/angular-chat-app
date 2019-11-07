@@ -44,4 +44,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.showFields = b;
   }
 
+  signedIn(): boolean {
+    return !this.authService.isSignedIn();
+  }
+
 }

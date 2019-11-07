@@ -1,5 +1,5 @@
 <div class="container login-container">
-        <button class="btn btn-primary loginBtn" *ngIf="!authService.isSignedIn()" (click)="showLoginFields(true)">Login</button>
+        <button class="btn btn-primary loginBtn" *ngIf="signedIn()" (click)="showLoginFields(true)">Login</button>
         <form class="form-horizontal login-form" *ngIf="showFields" [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
             <button class="btn btn-danger closeBtn" (click)="showLoginFields(false)"><span>x</span></button>
             <div class="alert alert-danger" role="alert" *ngIf="hasError">

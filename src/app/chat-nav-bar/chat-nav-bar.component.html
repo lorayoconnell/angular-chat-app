@@ -6,7 +6,8 @@
                 <button class="btn btn-primary" type="button">
                     Messages <span class="badge">{{ unreadMessagesCount }}</span>
                 </button>&nbsp;
-                <button class="btn btn-danger" type="button" *ngIf="authService.isSignedIn()" (click)="signOut()">
+                <button class="btn btn-danger" type="button" *ngIf="userSignedIn()" (click)="signOut()">
+                <!--<button class="btn btn-danger" type="button" *ngIf="authService.isSignedIn()" (click)="signOut()">-->
                     Sign Out
                 </button>
             </p>

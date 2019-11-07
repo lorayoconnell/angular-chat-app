@@ -14,6 +14,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class ChatNavBarComponent implements OnInit {
   unreadMessagesCount: number;
+  // signedIn: boolean;
 
   constructor(public messagesService: MessagesService,
               public threadsService: ThreadsService,
@@ -48,7 +49,14 @@ export class ChatNavBarComponent implements OnInit {
 
   }
 
-  signOut():void {
+  userSignedIn(): boolean {
+    if (this.authService.isSignedIn())
+      return true;
+    else
+      return false;
+  }
+
+  signOut(): void {
     this.authService.logOut();
   }
 

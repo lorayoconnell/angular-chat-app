@@ -9,12 +9,17 @@ import { AuthService } from '../auth/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
+  // userSignedIn: boolean;
   // loginComponent: LoginComponent;
   
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
     console.log("inside header.component.ts: isSignedIn: " + this.authService.signedIn);
+  }
+
+  signedIn(): boolean {
+    return !this.authService.isSignedIn();
   }
 
 }
