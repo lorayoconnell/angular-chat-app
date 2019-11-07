@@ -1,17 +1,11 @@
-import {
-  Component,
-  Inject,
-  OnInit
-} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-
 import { ThreadsService } from './../thread/threads.service';
 import { MessagesService } from './../message/messages.service';
-
 import { Thread } from './../thread/thread.model';
 import { Message } from './../message/message.model';
-
 import { combineLatest } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'chat-nav-bar',
@@ -22,10 +16,13 @@ export class ChatNavBarComponent implements OnInit {
   unreadMessagesCount: number;
 
   constructor(public messagesService: MessagesService,
-              public threadsService: ThreadsService) {
+              public threadsService: ThreadsService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
+
+    // get message unread counts
     this.messagesService.messages.pipe(
       combineLatest(this.threadsService.currentThread,
         (messages: Message[], currentThread: Thread) => 
@@ -48,6 +45,11 @@ export class ChatNavBarComponent implements OnInit {
             },
             0);
       });
+
+  }
+
+  signOut():void {
+    this.authService.logOut();
   }
 
 }

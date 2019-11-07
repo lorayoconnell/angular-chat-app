@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ThreadsService } from '../thread/threads.service';
 
 @Component({
   selector: 'chat-page',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChatPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(public threadService:ThreadsService) { }
 
   ngOnInit() {
+
+    
   }
 
 }

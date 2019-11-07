@@ -1,13 +1,11 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy, ElementRef } from '@angular/core';
+import { Component, Inject, ElementRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { User } from '../user/user.model';
-import { Message } from '../message/message.model';
-import { Thread } from '../thread/thread.model';
-
 import { UsersService } from '../user/users.service';
-import { MessagesService } from '../message/messages.service';
+import { Thread } from '../thread/thread.model';
 import { ThreadsService } from '../thread/threads.service';
+import { Message } from '../message/message.model';
+import { MessagesService } from '../message/messages.service';
 
 @Component({
   selector: 'chat-window',
@@ -17,40 +15,37 @@ import { ThreadsService } from '../thread/threads.service';
 })
 
 export class ChatWindowComponent implements OnInit {
-
   messages: Observable<any>;
   currentThread: Thread;
   draftMessage: Message;
   currentUser: User;
 
-  constructor(public messagesService: MessagesService,
-    public threadsService: ThreadsService,
-    public UsersService: UsersService,
-    public el: ElementRef) { }
+  showChat: boolean = false;
+
+  constructor(public messagesService: MessagesService, public threadsService: ThreadsService,
+              public UsersService: UsersService, public el: ElementRef) { }
 
   ngOnInit(): void {
-
     this.messages = this.threadsService.currentThreadMessages;
-          
     this.draftMessage = new Message();
-          
+
     this.threadsService.currentThread.subscribe(
-                (thread: Thread) => {
-                  this.currentThread = thread;
-                });
-          
+      (thread: Thread) => {
+        this.currentThread = thread;
+    });
+
     this.UsersService.currentUser.subscribe(
-                  (user: User) => {
-                    this.currentUser = user;
-                  });
-          
-      this.messages.subscribe(
-                  (messages: Array<Message>) => {
-                    setTimeout(() => {
-                      this.scrollToBottom();
-                    });
-                  });
-              
+        (user: User) => {
+          this.currentUser = user;
+    });
+
+    this.messages.subscribe(
+      (messages: Array<Message>) => {
+        setTimeout(() => {
+          this.scrollToBottom();
+        });
+    });
+    
   }
 
   onEnter(event: any): void {
@@ -66,13 +61,30 @@ export class ChatWindowComponent implements OnInit {
     this.messagesService.addMessage(m);
     this.draftMessage = new Message();
   }
-  
+
   scrollToBottom(): void {
     const scrollPane: any = this.el
       .nativeElement.querySelector('.msg-container-base');
+    if (scrollPane != null) {
       scrollPane.scrollTop = scrollPane.scrollHeight;
+    }
   }
 
+  /**
+   * if the current thread is closed completely, then
+   * the entire component goes away - including the
+   * 'chat' button to show the chat window...
+   * So multiple chat windows may stack.
+   * Better to put the 'chat' button in the footer component
+   * and open the ChatWindowComponent there
+   */
+  closeChat() {
+    // this.threadsService.closeCurrentThread();
+    this.showChat = false;
+  }
 
+  openChat() {
+    this.showChat = true;
+  }
 
 }

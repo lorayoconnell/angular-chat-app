@@ -1,0 +1,23 @@
+.panel-buttons-container {
+    text-align: right;
+}
+.btn-close {
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: auto;
+    color: #fff;
+}
+.btn-close:hover {
+    color: #a94442;
+}
+
+.chat-window {
+    bottom: 5.2em;
+}
+
+.chatBtn {
+    position: absolute;
+    right: 2em;
+    bottom: 1em;
+}
