@@ -20,6 +20,7 @@ ng build --prod
 works, but the code worked ok prior to prod build
 So I removed it just to create the dist
 
+but I still can't get the dist to run.......
 
 
 
