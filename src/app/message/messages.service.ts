@@ -14,7 +14,7 @@ interface IMessagesOperation extends Function {
 
 @Injectable()
 export class MessagesService {
-  
+
   // a stream that publishes new messages only once
   newMessages: Subject<Message> = new Subject<Message>();
   // `messages` is a stream that emits an array of the most up to date messages
@@ -68,11 +68,13 @@ export class MessagesService {
 
   // an imperative function call to this action stream
   addMessage(message: Message): void {
+    
+    //console.log("messages.service.ts: addMessage: message.text: " + message.id);
+
     this.newMessages.next(message);
 
-    this.dataService.updateMessage(message.id, {});
-
-
+    //this.dataService.passMessage(message);
+    //this.dataService.updateMessage(message.id, {});
     //this.dataService.uploadMessage(message);
     /*
     console.log("addMessage(): message.text: " + message.text
@@ -84,9 +86,6 @@ export class MessagesService {
                             + " message.thread.avatarSrc: " + message.thread.avatarSrc);
     */
   }
-
-
-
 
   messagesForThreadUser(thread: Thread, user: User): Observable<Message> {
     return this.newMessages.pipe(

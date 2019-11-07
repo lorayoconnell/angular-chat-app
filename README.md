@@ -1,5 +1,32 @@
 # ChatApp
 
+
+
+https://github.com/lorayoconnell/angular-chat-app
+
+
+completed requirements
+completed extra credit = logout of the app
+didn't complete the uploading of msgs to firebase db
+
+
+1. Expand on the chat application from the reading by adding a login component, an authguard, blocking unauthorized users from navigating to the chat component, and add firebase authentication.
+
+2. when the user successfully logs in, the application routes to the chat application.
+
+3. when the user login is unsuccessful the chat component route is guarded from unauthorized users
+
+4. when the user would like to chat they click on an icon fixed in the bottom right corner
+
+5. when the user is done chatting they can click the fixed icon to toggle or hide the display of the chat component.
+
+6. Extra credit:  When the user clicks the logout button in the logout component, the user is signed out of the chat application.
+
+7. Extra credit: when a user enters messages upload the messages to a thread list or messages list in the firebase database.
+
+
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.17.
 
 ## Development server

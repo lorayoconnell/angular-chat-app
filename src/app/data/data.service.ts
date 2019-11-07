@@ -20,11 +20,7 @@ export class DataService {
   }
 
 
-
-// was able to upload messages to the firebase database,
-// but it was creating a new message every time
-
-// like the todo app, should have "create item"
+// should have "create item"
 // as well as "update item"
 
 uploadMessage(msg: Message): void {
@@ -32,18 +28,18 @@ uploadMessage(msg: Message): void {
 
   //key = msg.id;
 
-  
   this.updateMessage(msg.id, msg.isRead);
   this.updateMessage(msg.id, msg.sentAt);
   this.updateMessage(msg.id, msg.text);
 
- // this.updateMessage(msg.id, msg.author);
+  console.log("message updated. msg id: " + msg.id);
+  // this.updateMessage(msg.id, msg.author);
   //  this.updateMessage(msg.id, msg.thread);
-
-
 
 }
 
+passMessage(msg: Message) {
+}
 
 
 createMessage(msg: Message): void {
@@ -55,6 +51,7 @@ updateMessage(key: string, value: any): Promise<void> {
 }
 
 getMessages(): AngularFireList<Message> {
+  console.log("getting messages");
   return this.messagesRef;
 }
 
@@ -66,20 +63,15 @@ deleteAll(): Promise<void> {
 }
 
 
+
+
 /*
-  
-
-
-
   uploadMessage(message: Message): void {
     console.log("inside uploadMessage");
     //this.messagesRef.push(message);
   }
-
   getMessages(): AngularFireList<Message> {
     return this.messagesRef;
   }
-
-
 }
 */

@@ -1,4 +1,3 @@
-/* tslint:disable:max-line-length */
 import { User } from '../user/user.model';
 import { Thread } from '../thread/thread.model';
 import { Message } from '../message/message.model';
@@ -6,8 +5,9 @@ import { MessagesService } from '../message/messages.service';
 import { ThreadsService } from '../thread/threads.service';
 import { UsersService } from '../user/users.service';
 import * as moment from 'moment';
+import { DataService } from './data.service';
+import { map } from 'rxjs/operators';
 
-// the person using the app us Juliet
 const me: User      = new User('Juliet', 'assets/images/avatars/female-avatar-1.png');
 const ladycap: User = new User('Lady Capulet', 'assets/images/avatars/female-avatar-2.png');
 const echo: User    = new User('Echo Bot', 'assets/images/avatars/male-avatar-1.png');
@@ -19,61 +19,72 @@ const tEcho: Thread    = new Thread('tEcho', echo.name, echo.avatarSrc);
 const tRev: Thread     = new Thread('tRev', rev.name, rev.avatarSrc);
 const tWait: Thread    = new Thread('tWait', wait.name, wait.avatarSrc);
 
-const initialMessages: Array<Message> = [
-  new Message({
-    author: me,
-    sentAt: moment().subtract(45, 'minutes').toDate(),
-    text: 'Yet let me weep for such a feeling loss.',
-    thread: tLadycap
-  }),
-  new Message({
-    author: ladycap,
-    sentAt: moment().subtract(20, 'minutes').toDate(),
-    text: 'So shall you feel the loss, but not the friend which you weep for.',
-    thread: tLadycap
-  }),
-  new Message({
-    author: echo,
-    sentAt: moment().subtract(1, 'minutes').toDate(),
-    text: `I\'ll echo whatever you send me`,
-    thread: tEcho
-  }),
-  new Message({
-    author: rev,
-    sentAt: moment().subtract(3, 'minutes').toDate(),
-    text: `I\'ll reverse whatever you send me`,
-    thread: tRev
-  }),
-  new Message({
-    author: wait,
-    sentAt: moment().subtract(4, 'minutes').toDate(),
-    text: `I\'ll wait however many seconds you send to me before responding. Try sending '3'`,
-    thread: tWait
-  }),
-];
 
-export class ChatExampleData {
-  static init(messagesService: MessagesService,
-              threadsService: ThreadsService,
-              UsersService: UsersService): void {
+export class GetData {
 
-    // TODO make `messages` hot
-    messagesService.messages.subscribe(() => ({}));
+    messages: Message[];
+    msg: Message;
+    usr: User;
+    thr: Thread;
+    dat: Date;
+    txt: string;
+    isr: boolean;
 
-    // set "Juliet" as the current user
-    UsersService.setCurrentUser(me);
+    constructor(public dataService: DataService) {
+    }
 
-    // create the initial messages
-    initialMessages.map( (message: Message) => messagesService.addMessage(message) );
+    static init(messagesService: MessagesService,
+                threadsService: ThreadsService,
+                usersService: UsersService): void {
+        // TODO make `messages` hot
+        messagesService.messages.subscribe(() => ({}));
+        // set "Juliet" as the current user
+        usersService.setCurrentUser(me);
 
-    threadsService.setCurrentThread(tEcho);
+        // create the initial messages
+        // initialMessages.map( (message: Message) => messagesService.addMessage(message) );
 
-    this.setupBots(messagesService);
-  }
+        // threadsService.setCurrentThread(tEcho);
+        // this.setupBots(messagesService);
+
+    }
 
 
-  
-  static setupBots(messagesService: MessagesService): void {
+    getMsgInfo(msg: Message) {
+    this.usr = msg.author;
+    this.thr = msg.thread;
+    this.dat = msg.sentAt;
+    this.txt = msg.text;
+    this.isr = msg.isRead;
+    }
+
+    initialMessages: Array<Message> = [
+    new Message({
+        author: me,
+        sentAt: moment().subtract(45, 'minutes').toDate(),
+        text: 'Yet let me weep for such a feeling loss.',
+        thread: tLadycap
+    })
+    ];
+
+
+
+    getMessagesList() {
+        this.dataService.getMessages().snapshotChanges().pipe(
+            map(changes =>
+                changes.map(c => ({ key: c.payload.key, ...c.payload.val() }) )
+            )
+        ).subscribe(messages => {
+            this.messages = messages;
+        });
+    
+        // console.log("length: " + this.messages.length);
+    }
+
+
+
+
+ static setupBots(messagesService: MessagesService): void {
 
     // echo bot
     messagesService.messagesForThreadUser(tEcho, echo)
@@ -87,7 +98,6 @@ export class ChatExampleData {
         );
       },
                 null);
-
 
     // reverse bot
     messagesService.messagesForThreadUser(tRev, rev)
@@ -132,5 +142,4 @@ export class ChatExampleData {
 
 
   }
-
 }
