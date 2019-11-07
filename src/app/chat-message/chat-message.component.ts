@@ -36,8 +36,7 @@ export class ChatMessageComponent implements OnInit {
           this.currentUser = user;
           
           if (this.message.author && user) {
-            //@ViewChild(this.incoming)
-            
+
             this.incoming = this.message.author.id !== user.id;
           }
         });

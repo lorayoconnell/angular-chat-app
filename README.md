@@ -5,6 +5,28 @@
 https://github.com/lorayoconnell/angular-chat-app
 
 
+I can't get the build --prod to work
+because I keep getting this error:
+ERROR in src/app/chat-message/chat-message.component.html(6,29): Expected 2 arguments, but got 1.
+
+looking online, it's some kind of Angular 8 migration issue where @ViewChild needs to
+take 2 parameters instead of 1. I can't figure out how to incorporate @ViewChild into my
+chat-message.component.ts
+There's some kind of issue about nested queries & when the change detection occurs.
+
+if I remove this line:
+ <!--<p class="time">{{message.author}} • {{message.sentAt | fromNow}}</p>-->
+ng build --prod  
+works, but the code worked ok prior to prod build
+So I removed it just to create the dist
+
+
+
+
+
+
+
+
 completed requirements
 completed extra credit = logout of the app
 didn't complete the uploading of msgs to firebase db
