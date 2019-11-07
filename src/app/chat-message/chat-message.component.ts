@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 //import { Observable } from 'rxjs';
 
 import { UsersService } from './../user/users.service';
@@ -15,18 +15,29 @@ import { User } from './../user/user.model';
   styleUrls: ['./chat-message.component.css']
 })
 export class ChatMessageComponent implements OnInit {
+
+  
   @Input() message: Message;
+
+// @ViewChild(this.message, {static: false})
+  
+
   currentUser: User;
   incoming: boolean;
+
 
   constructor(public UsersService: UsersService) { }
 
   ngOnInit(): void {
+    
     this.UsersService.currentUser
       .subscribe(
         (user: User) => {
           this.currentUser = user;
+          
           if (this.message.author && user) {
+            //@ViewChild(this.incoming)
+            
             this.incoming = this.message.author.id !== user.id;
           }
         });
