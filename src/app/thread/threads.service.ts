@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { map, combineLatest } from 'rxjs/operators';
 import { Thread } from './thread.model';
 import { Message } from '../message/message.model';
@@ -9,27 +9,33 @@ import * as _ from 'lodash';
 @Injectable()
 export class ThreadsService {
 
-  // 'threads' is an observable that contains the most up to date list of threads
+  // `threads` is a observable that contains the most up to date list of threads
   threads: Observable<{ [key: string]: Thread }>;
 
   // `orderedThreads` contains a newest-first chronological list of threads
   orderedThreads: Observable<Thread[]>;
-  
+
   // `currentThread` contains the currently selected thread
-  currentThread: Subject<Thread> = new BehaviorSubject<Thread>(new Thread());
+  currentThread: Subject<Thread> =
+    new BehaviorSubject<Thread>(new Thread());
 
   // `currentThreadMessages` contains the set of messages for the currently
   // selected thread
   currentThreadMessages: Observable<Message[]>;
 
+  isClosed: boolean = true;
+
   constructor(public messagesService: MessagesService) {
 
       this.threads = messagesService.messages.pipe(
-        map( (messages: Message[]) => {
+        map(
+          (messages: Message[]) => {
             const threads: {[key: string]: Thread} = {};
             // Store the message's thread in our accumulator `threads`
             messages.map((message: Message) => {
-              threads[message.thread.id] = threads[message.thread.id] || message.thread;
+              threads[message.thread.id] = threads[message.thread.id] ||
+                message.thread;
+    
               // Cache the most recent message for each thread
               const messagesThread: Thread = threads[message.thread.id];
               if (!messagesThread.lastMessage ||
@@ -71,10 +77,21 @@ export class ThreadsService {
     
   }
 
-
   setCurrentThread(newThread: Thread): void {
-    this.currentThread.next(newThread);
+    if (newThread) {
+      this.currentThread.next(newThread);
+      this.isClosed = false;
+    }
   }
+
+  closeCurrentThread() {
+    this.setCurrentThread(new Thread());
+    this.isClosed = true;
+  }
+  openCurrentThread() {
+    this.isClosed = false;
+  }
+
 }
 
 export const threadsServiceInjectables: Array<any> = [
